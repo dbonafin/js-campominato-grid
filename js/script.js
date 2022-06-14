@@ -42,8 +42,18 @@ switch(userLevel) {
 const bombNumbers = 16;
 const bombs = generateBombNumbers(bombNumbers, minRangeLevel, maxRangeLevel);
 
+// Max attempts qty
+const maxAttempts = maxRangeLevel - bombs;
+
+safeNumbers();
 
 // FUNCTIONS //
+
+
+// Function that generates the 16 bomb-numbers
+function genRandomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
 
 // Function that push the bomb numbers in the bombsArray
 function generateBombNumbers(bombNumbers, minRangeLevel, maxRangeLevel) {
@@ -51,18 +61,37 @@ function generateBombNumbers(bombNumbers, minRangeLevel, maxRangeLevel) {
 
     while (bombsArray.length < bombNumbers) {
         const randomBomb = genRandomNumber(minRangeLevel, maxRangeLevel);
+
+        // Push the random bombNumber in the bombsArray - if not already present
         if (!bombsArray.includes(randomBomb)) {
             bombsArray.push(randomBomb)
         }
     }
 
-    console.log("array bombe", bombsArray)
+    return bombsArray;
+}
+
+// Function that checks if the userNumber is a safeNumber or a bombNumber
+function safeNumbers() {
+    const safeArray = [];
+
+
+    while (safeArray.length < maxAttempts) {
+
+        const userNumber = parseInt(prompt("Digita un numero"));
+        console.log("numero scelto da user", userNumber);
+
+
+        // If the numberUser is the same as an element of the bombsArray - game over
+        if (bombsArray.includes(userNumber)) {
+            alert("Hai perso")
+        }
+
+
+    }
+    console.log("array con numeri scelti da user", safeArray);
 }
 
 console.log("livello difficoltà", userLevel);
 console.log("range massimo", maxRangeLevel);
-
-// Function that generates the 16 bomb-numbers
-function genRandomNumber(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) ) + min;
-}
+console.log("numeri delle bombe", bombs);

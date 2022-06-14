@@ -9,15 +9,13 @@
 // I numeri nella lista delle bombe non possono essere duplicati.
 // In seguito l'utente inserisce ogni volta un nuovo numero (PROMPT)
 // Se il numero è presente nella lista dei numeri generati, abbiamo calpestato una bomb,
-// dunque il gioco finisce con un messaggio di game over.
-// Al termine della partita il software deve comunicare il punteggio, 
-// ovvero il numero di tentativi prima che si scegliesse un bomb-number.
+// dunque il gioco finisce con un messaggio di game over + numero di tentativi corretti.
 // Altrimenti il gioco va avanti fino a quando si raggiunge il numero massimo di tentativi (maxRange-bombs)
-// In questo caso il gioco finisce con un messaggio di vittoria. (FUNCTION)
+// In questo caso il gioco finisce con un messaggio di vittoria
 
 
 // Ask the user the difficulty level of the game
-const userLevel = parseInt(prompt("Scegli il livello di difficoltà: 1, 2 o 3"))
+const userLevel = parseInt(prompt("Scegli il livello di difficoltà: 1, 2 o 3"));
 
 // Calc the different level ranges
 let maxRangeLevel; 
@@ -38,14 +36,16 @@ switch(userLevel) {
         break;
 }
 
-// Bomb-numbers qty
+// Bomb-numbers 
 const bombNumbers = 16;
 const bombs = generateBombNumbers(bombNumbers, minRangeLevel, maxRangeLevel);
 
-// Max attempts qty
-const maxAttempts = maxRangeLevel - bombs;
+// Max attempts 
+const maxAttempts = maxRangeLevel - bombNumbers;
 
-safeNumbers();
+// Safe numbers
+const safeNumbersArray = [];
+
 
 // FUNCTIONS //
 
@@ -64,34 +64,34 @@ function generateBombNumbers(bombNumbers, minRangeLevel, maxRangeLevel) {
 
         // Push the random bombNumber in the bombsArray - if not already present
         if (!bombsArray.includes(randomBomb)) {
-            bombsArray.push(randomBomb)
+            bombsArray.push(randomBomb);
         }
     }
 
     return bombsArray;
 }
 
-// Function that checks if the userNumber is a safeNumber or a bombNumber
-function safeNumbers() {
-    const safeArray = [];
+// Logic engine of the game
+let gameGoesOn = true;
+while (gameGoesOn) {
 
-
-    while (safeArray.length < maxAttempts) {
-
-        const userNumber = parseInt(prompt("Digita un numero"));
-        console.log("numero scelto da user", userNumber);
-
-
-        // If the numberUser is the same as an element of the bombsArray - game over
-        if (bombsArray.includes(userNumber)) {
-            alert("Hai perso")
+    // Ask the user a number till the end games 
+    const userNumber = parseInt(prompt("Digita un numero"));
+    
+    // If the userNumber is a bombNumber - game over
+    if (bombs.includes(userNumber)) {
+        alert(`Hai perso! Tentativi corretti: ${safeNumbersArray.length}`);
+        gameGoesOn = false;
+    } else {
+        // Push the userNumber in the safeNumbersArray - if not already present
+        if (!safeNumbersArray.includes(userNumber)) {
+            safeNumbersArray.push(userNumber);
         }
 
-
+        // If the user reaches the number of maxAttempts - win alert
+        if (safeNumbersArray.length === maxAttempts) {
+            alert("Hai vinto! Hai raggiunto il numero massimo di tentativi corretti");
+            gameGoesOn = false;
+        }
     }
-    console.log("array con numeri scelti da user", safeArray);
 }
-
-console.log("livello difficoltà", userLevel);
-console.log("range massimo", maxRangeLevel);
-console.log("numeri delle bombe", bombs);

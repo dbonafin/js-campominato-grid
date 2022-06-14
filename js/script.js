@@ -5,13 +5,13 @@
 // Difficoltà 3 => tra 1 e 49
 // Se utente inserisce numero non richiesto si assegna la difficoltà default.
 // Il minRange (1) è comune a tutti i livelli, mentre il maxRange varia (SWITCH)
-// Il computer deve generare 16 numeri casuali, le bombs, nello stesso range della difficoltà scelta (FUNCTION)
+// Il computer deve generare 16 bomb-numbers, nello stesso range della difficoltà scelta (FUNCTION)
 // I numeri nella lista delle bombe non possono essere duplicati.
 // In seguito l'utente inserisce ogni volta un nuovo numero (PROMPT)
 // Se il numero è presente nella lista dei numeri generati, abbiamo calpestato una bomb,
 // dunque il gioco finisce con un messaggio di game over.
 // Al termine della partita il software deve comunicare il punteggio, 
-// ovvero il numero di tentativi prima che si scegliesse una bomb.
+// ovvero il numero di tentativi prima che si scegliesse un bomb-number.
 // Altrimenti il gioco va avanti fino a quando si raggiunge il numero massimo di tentativi (maxRange-bombs)
 // In questo caso il gioco finisce con un messaggio di vittoria. (FUNCTION)
 
@@ -38,5 +38,31 @@ switch(userLevel) {
         break;
 }
 
-console.log(userLevel);
-console.log(maxRangeLevel);
+// Bomb-numbers qty
+const bombNumbers = 16;
+const bombs = generateBombNumbers(bombNumbers, minRangeLevel, maxRangeLevel);
+
+
+// FUNCTIONS //
+
+// Function that push the bomb numbers in the bombsArray
+function generateBombNumbers(bombNumbers, minRangeLevel, maxRangeLevel) {
+    const bombsArray = [];
+
+    while (bombsArray.length < bombNumbers) {
+        const randomBomb = genRandomNumber(minRangeLevel, maxRangeLevel);
+        if (!bombsArray.includes(randomBomb)) {
+            bombsArray.push(randomBomb)
+        }
+    }
+
+    console.log("array bombe", bombsArray)
+}
+
+console.log("livello difficoltà", userLevel);
+console.log("range massimo", maxRangeLevel);
+
+// Function that generates the 16 bomb-numbers
+function genRandomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
